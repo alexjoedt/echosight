@@ -1,0 +1,32 @@
+{
+	"$schema": "./config-schema-v1.json",
+    "logLevel": "debug",
+    "environment": "dev",
+    "secret": "664644d7580d1a30f1c851d896c97e84",
+    "http":{
+        "port":"8082",
+        "trustedOrigins": ["http://localhost:5173"]
+    },
+    "postgres": {
+        "host":"localhost",
+        "port":"6432",
+        "database":"echosight_dev",
+        "user":"root",
+        "password":"root"
+    },
+    "influxdb":{
+        "host":"localhost",
+        "port":"8086",
+        "ssl": false,
+        "user":"root",
+        "password": "root",
+        "token": "",
+        "bucket": "metrics",
+        "retentionPeriodHours":"168h"
+    },
+    "redis": {
+		"host": "localhost",
+		"port": "6379",
+		"password": "root"
+	}
+}

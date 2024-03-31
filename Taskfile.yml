@@ -1,0 +1,58 @@
+version: '3'
+
+vars:
+  BINARY: echosight
+
+tasks:
+  tidy:
+    cmds:
+      - go fmt ./...
+      - go mod tidy
+
+  test:
+    cmds:
+      - go test --cover ./...
+      - go mod verify
+
+  build:
+    cmds:
+      - go mod verify
+      - go build -o bin/{{.BINARY}} cmd/server/main.go
+
+  run:
+    cmds:
+      - task: build
+      - ./bin/{{.BINARY}}
+
+  clean:
+    cmds:
+      - rm -rf bin
+      - rm -rf logs
+
+  migrate:new:
+    desc: "Create a new database migration."
+    silent: true
+    cmds:
+      - echo "Creating new migration..."
+      - migrate create -seq -ext=.sql -dir=./internal/postgres/migrations {{.CLI_ARGS}}
+
+  migrate:up:
+    desc: "Run database migrations"
+    silent: false
+    cmds:
+      - migrate -verbose -database ${POSTGRESQL_URL} -path {{.USER_WORKING_DIR}}/internal/postgres/migrations up
+
+  migrate:drop:
+    desc: "Drop database migrations"
+    silent: true
+    cmds:
+      - migrate -verbose -path=./internal/postgres/migrations -database ${POSTGRESQL_URL} drop -f
+  
+  migrate:reset:
+    cmds:
+      - task: migrate:drop
+      - task: migrate:up
+
+  proto:
+    cmds:
+      - protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ./internal/commander/command.proto

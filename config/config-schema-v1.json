@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "additionalItems": false,
+  "required": [
+    "postgres",
+    "influxdb"
+  ],
+  "properties": {
+    "logLevel": {
+      "type": "string",
+      "pattern": "[a-z]",
+      "description": "logging level of the application",
+      "enum": [
+        "info",
+        "warn",
+        "error",
+        "debug",
+        "trace"
+      ]
+    },
+    "secret": {
+      "type": "string",
+      "pattern": "[a-f0-9]{32}",
+      "description": "32 byte secret to encrypt sensetive data with AES"
+    },
+    "environment": {
+      "type": "string",
+      "description": "environment of the current runtime, default is production",
+      "enum": [
+        "dev",
+        "development",
+        "prod",
+        "production"
+      ]
+    },
+    "http": {
+      "type": "object",
+      "required": [
+        "port"
+      ],
+      "properties": {
+        "port": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "trustedOrigins": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "limiter": {
+          "type": "object",
+          "properties": {
+            "rateLimit": {
+              "type": "number"
+            },
+            "burst": {
+              "type": "integer"
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "postgres": {
+      "type": "object",
+      "required": [
+        "host",
+        "port",
+        "user",
+        "password"
+      ],
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "user": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "influxdb": {
+      "type": "object",
+      "required": [
+        "host",
+        "port",
+        "ssl",
+        "user",
+        "password",
+        "token"
+      ],
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "ssl": {
+          "type": "boolean"
+        },
+        "user": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "redis": {
+      "type": "object",
+      "required": [
+        "host",
+        "port",
+        "password"
+      ],
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "cache": {
+      "type": "object",
+      "properties": {
+        "cacheType": {
+          "type": "string",
+          "enum": [
+            "local",
+            "redis"
+          ]
+        },
+        "ttl": {
+          "type": "string",
+          "pattern": "^[0-9]+[smh]$",
+          "examples": [
+            "30s",
+            "5m",
+            "24h"
+          ]
+        }
+      }
+    },
+    "smtp": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "sender": {
+          "type": "string",
+          "format": "email"
+        }
+      }
+    },
+    "nats": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string",
+          "description": "nats host"
+        },
+        "port": {
+          "type": "string",
+          "description": "nats port"
+        }
+      }
+    }
+  }
+}

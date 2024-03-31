@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "github.com/alexjoedt/echosight/internal/commander";
+
+message ExecuteCommandRequest {
+  string command = 1;
+  bytes payload = 2;
+  string arguments = 3;
+}
+
+message ExecuteCommandResponse {
+  bytes result = 1;
+}
+
+service CommandExecutor {
+  rpc Execute(ExecuteCommandRequest) returns (ExecuteCommandResponse);
+}
