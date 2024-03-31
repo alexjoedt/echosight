@@ -88,7 +88,7 @@ func Run() error {
 
 	// Init observer engine and starts
 	logger.Debugf("Initialize Observer-Engine...")
-	scheduler := engine.NewScheduler(&db.Detectors, influxClient, eventHandler, notifier) // the eventhandler is the server and the server gets the Observer-Engine as dependency
+	scheduler := engine.NewScheduler(&db.Detectors, influxClient, eventHandler, notifier)
 
 	// load all active detectors
 	dFilter := filter.NewDefaultDetectorFilter()
