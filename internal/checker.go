@@ -18,11 +18,7 @@ type Checker interface {
 type CheckerConfig map[string]any
 
 func (dc *CheckerConfig) Unmarshal(v any) error {
-	err := mapstructure.Decode(dc, v)
-	if err != nil {
-		return err
-	}
-	return nil
+	return mapstructure.Decode(dc, v)
 }
 
 // TODO: use int with iota, see below?
