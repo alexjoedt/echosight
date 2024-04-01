@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/mitchellh/mapstructure"
 	"github.com/uptrace/bun"
 )
 
@@ -78,16 +77,15 @@ func ValidateDetectorConfig(d *Detector) bool {
 	if d.Config == nil {
 		return false
 	}
-
 	// Add here new Checkers/Detectors
 	// TODO:  improve this
 	switch d.Type {
 	case DetectorHTTP:
 		var httpConfig HTTPChecker
-		return nil == mapstructure.Decode(d.Config, &httpConfig)
+		return nil == d.Config.Unmarshal(&httpConfig)
 	case DetectorPostgres:
 		var postgresConfig PostgresChecker
-		return nil == mapstructure.Decode(d.Config, &postgresConfig)
+		return nil == d.Config.Unmarshal(&postgresConfig)
 	case DetectorAgent:
 		var agentConfig AgentConfig
 		return nil == d.Config.Unmarshal(&agentConfig)
