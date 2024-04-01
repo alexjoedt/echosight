@@ -14,11 +14,9 @@ type eventWrapper struct {
 }
 
 type Engine struct {
-	mu         sync.RWMutex
-	topics     map[string]*Topic
-	eventQueue chan *eventWrapper
-	log        *logger.Logger
-	wg         sync.WaitGroup
+	mu     sync.RWMutex
+	topics map[string]*Topic
+	log    *logger.Logger
 }
 
 func NewEngine() *Engine {
@@ -115,9 +113,5 @@ func (e *Engine) Stop() error {
 			t.mu.Unlock()
 		}
 	}
-
-	close(e.eventQueue)
-	e.wg.Wait()
-
 	return nil
 }
