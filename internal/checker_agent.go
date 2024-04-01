@@ -71,30 +71,11 @@ func (a *AgentConfig) Check(ctx context.Context) *Result {
 	}
 	defer a.client.Close()
 
+	var result *Result
 	// TODO: create specific funcs and assign to a map, like the checker funcs
 	switch a.Command {
 	case agent.CommandCheckCPU:
-		res, err := a.client.CheckCPU(ctx)
-		if err != nil {
-			return &Result{State: StateCritical, Message: err.Error(), err: err}
-		}
-
-		result := &Result{
-			State: StateOK,
-			Metric: &Metric{
-				Fields: make(map[string]any, 0),
-				Tags:   make(map[string]string, 0),
-				Time:   time.Now(),
-			},
-		}
-
-		for k, v := range res.CPUs {
-			result.Metric.Fields[k] = v
-		}
-
-		result.State = a.evaluateThreshold(a.calcCPUAverage(result))
-		return a.detector.ApplyIDs(result)
-
+		result = a.checkCPU(ctx)
 	case agent.CommandCheckRAM:
 		return &Result{State: StateCritical, Message: "not implemented"}
 	case agent.CommandCheckDisk:
@@ -106,6 +87,31 @@ func (a *AgentConfig) Check(ctx context.Context) *Result {
 	default:
 		return &Result{State: StateCritical, Message: "not implemented"}
 	}
+
+	return a.detector.ApplyIDs(result)
+}
+
+func (a *AgentConfig) checkCPU(ctx context.Context) *Result {
+	res, err := a.client.CheckCPU(ctx)
+	if err != nil {
+		return &Result{State: StateCritical, Message: err.Error(), err: err}
+	}
+
+	result := &Result{
+		State: StateOK,
+		Metric: &Metric{
+			Fields: make(map[string]any, 0),
+			Tags:   make(map[string]string, 0),
+			Time:   time.Now(),
+		},
+	}
+
+	for k, v := range res.CPUs {
+		result.Metric.Fields[k] = v
+	}
+
+	result.State = a.evaluateThreshold(a.calcCPUAverage(result))
+	return result
 }
 
 // calcCPUAverage calculates the average from multiple cpu cores
