@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/shirou/gopsutil/v3/mem"
 	"google.golang.org/grpc"
 )
 
@@ -59,27 +58,8 @@ type Result struct {
 func (s *commandServer) executeCommand(ctx context.Context, cmd Command, args string) (*Result, error) {
 
 	var executor Executor
-	switch cmd {
-
-	case CommandCheckCPU:
-		executor = NewCPUExecutor(args)
-
-	case CommandCheckRAM:
-		v, _ := mem.VirtualMemory()
-		res := &RAMResult{
-			Total:       v.Total,
-			Free:        v.Free,
-			Used:        v.Used,
-			UsedPercent: v.UsedPercent,
-		}
-		return &Result{Payload: res.Bytes()}, nil
-
-	case CommandCheckDisk:
-		fmt.Println("Check Disk")
-	case CommandCheckDocker:
-		// TODO: docker api (socket)
-		return nil, fmt.Errorf("not implemented")
-	default:
+	var ok bool
+	if executor, ok = executors[cmd]; !ok {
 		return nil, fmt.Errorf("invalid command '%s'", cmd)
 	}
 
