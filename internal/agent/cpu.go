@@ -18,14 +18,10 @@ func (m *CPUResult) Bytes() []byte {
 	return data
 }
 
+var _ Executor = (*CPUExecutor)(nil)
+
 type CPUExecutor struct {
 	allCPUs bool
-}
-
-func NewCPUExecutor(args string) *CPUExecutor {
-	executor := new(CPUExecutor)
-
-	return executor
 }
 
 func (e *CPUExecutor) Execute(ctx context.Context) (*Result, error) {
