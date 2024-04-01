@@ -52,13 +52,13 @@ func (c *Client) CheckCPU(ctx context.Context) (*CPUResult, error) {
 	return &cpuResult, nil
 }
 
-func (c *Client) CheckRAM(ctx context.Context) (*RAMResult, error) {
+func (c *Client) CheckMemory(ctx context.Context) (*MemoryResult, error) {
 	res, err := c.execute(ctx, CommandCheckRAM)
 	if err != nil {
 		return nil, err
 	}
 
-	var ramResult RAMResult
+	var ramResult MemoryResult
 	err = json.Unmarshal(res.Payload, &ramResult)
 	if err != nil {
 		return nil, err
