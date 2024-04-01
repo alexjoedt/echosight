@@ -95,22 +95,3 @@ func ValidateDetectorConfig(d *Detector) bool {
 
 	return false
 }
-
-func ValidateDetectorType(d *Detector) bool {
-	if d.Config == nil {
-		return false
-	}
-
-	// Add here new Checkers/Detectors
-	// TODO:  improve this
-	switch d.Type {
-	case DetectorHTTP:
-		return true
-	case DetectorPostgres:
-		return true
-	case DetectorAgent:
-		return true
-	}
-
-	return false
-}

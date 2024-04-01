@@ -23,7 +23,6 @@ func ValidateDetector(v *validator.Validator, detector *Detector) {
 	v.Check(len(detector.Name) > 3, "name", "name too short")
 	v.Check(uuid.Validate(detector.HostID.String()) == nil, "hostID", "invalid host ID")
 	v.Check(ValidateDetectorConfig(detector), "config", "invalid config for type "+detector.Type.String())
-	v.Check(ValidateDetectorType(detector), "type", "unsupported detector type")
 }
 
 func ValidateHost(v *validator.Validator, host *Host) {
