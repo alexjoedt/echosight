@@ -181,7 +181,7 @@ func (s *Scheduler) Start() {
 
 	s.taskPool = make(chan *executor, s.workerCount)
 	for i := 0; i < s.workerCount; i++ {
-		s.workerWg.Add(i)
+		s.workerWg.Add(1)
 		go s.worker(i)
 	}
 
