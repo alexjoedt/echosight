@@ -53,7 +53,6 @@ type Scheduler struct {
 	workerCount int
 	workerWg    sync.WaitGroup
 	schedulerWg sync.WaitGroup
-	semaphore   chan struct{}
 }
 
 func NewScheduler(ds es.DetectorService, ms es.MetricService, eh *flow.Engine, n *notify.Notifier) *Scheduler {
@@ -68,7 +67,6 @@ func NewScheduler(ds es.DetectorService, ms es.MetricService, eh *flow.Engine, n
 		eventHandler:    eh,
 		notifier:        n,
 		stop:            make(chan struct{}, 1),
-		semaphore:       make(chan struct{}, 1),
 		log:             logger.New("Observer-Scheduler"),
 	}
 
