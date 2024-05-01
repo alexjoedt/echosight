@@ -86,7 +86,7 @@ func (e *Engine) Subscribe(ctx context.Context, topicID string, onEventFn EventH
 	return t.Subscribe(ctx, onEventFn)
 }
 
-func (e *Engine) SubscribeChannel(topicID string) (chan *Event, error) {
+func (e *Engine) SubscribeChannel(topicID string) (<-chan *Event, error) {
 	t, err := e.GetTopic(topicID)
 	if err != nil {
 		return nil, err
