@@ -1,11 +1,10 @@
 package eventflow
 
 type Subscription struct {
-	ID           string
-	event        chan *Event
-	done         chan struct{}
-	topic        *Topic
-	eventHandler EventHandler
+	ID    string
+	event chan *Event
+	done  chan struct{}
+	topic *Topic
 }
 
 func (s *Subscription) Close() error {
